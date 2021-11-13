@@ -30,6 +30,19 @@ async function run() {
             // console.log(appointments);
             res.json(products)
         });
+        //Admin create
+        app.put('/users/:email', async (req, res) => {
+            const email = req.params.email;
+            // console.log('Hitting,', email)
+            const filter = { email: email };
+            const updateDoc = {
+                $set: {
+                    power: 'admin'
+                },
+            };
+            const result = await usersCollection.updateOne(filter, updateDoc);
+            res.json(result);
+        });
 
         // GET Dynamic API
         app.get('/products/:id', async (req, res) => {
@@ -41,6 +54,17 @@ async function run() {
             res.json(product)
 
         });
+        // Admin Check
+        app.get('/users/:email', async (req, res) => {
+            const emial = req.params.email // Dynamic ID ta nicche
+            // console.log('hiiting to the backend id=', id);
+            const query = { email: emial };
+            const result = await usersCollection.findOne(query);
+            console.log(result?.power)
+            res.json(result?.power)
+
+        });
+
         // Save User Information 
 
         app.post('/users', async (req, res) => {
@@ -57,6 +81,26 @@ async function run() {
             // console.log(result);
             res.json(result);
 
+        })
+        //Single user Orders
+        app.get('/orders', async (req, res) => {
+            const email = req.query.email;
+
+            // console.log("hitting with =", email);
+            // console.log(date);
+            const query = { email: email };
+            const cursor = ordersCollection.find(query);
+            const products = await cursor.toArray();
+            // console.log(products);
+            res.json(products)
+        });
+        //Delete API
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await ordersCollection.deleteOne(query);
+            console.log(result);
+            res.json(result);
         })
 
     }
