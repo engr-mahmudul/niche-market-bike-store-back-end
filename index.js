@@ -104,11 +104,26 @@ async function run() {
             // console.log(products);
             res.json(products)
         });
+        app.get('/allorders', async (req, res) => {
+
+            const cursor = ordersCollection.find({});
+            const products = await cursor.toArray();
+            // console.log(products);
+            res.json(products)
+        });
         //Delete API
         app.delete('/orders/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await ordersCollection.deleteOne(query);
+            console.log(result);
+            res.json(result);
+        });
+        //Prodect delete
+        app.delete('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await productsCollection.deleteOne(query);
             console.log(result);
             res.json(result);
         });
