@@ -21,6 +21,8 @@ async function run() {
         const productsCollection = database.collection('products');
         const usersCollection = database.collection('users');
         const ordersCollection = database.collection('orders');
+        const reviewCollection = database.collection('reviews');
+
         console.log('Connected to database');
         // Show data 
         app.get('/products', async (req, res) => {
@@ -101,7 +103,15 @@ async function run() {
             const result = await ordersCollection.deleteOne(query);
             console.log(result);
             res.json(result);
-        })
+        });
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            // console.log(result);
+            res.json(result);
+
+        });
+
 
     }
     finally {
