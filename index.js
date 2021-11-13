@@ -32,6 +32,14 @@ async function run() {
             // console.log(appointments);
             res.json(products)
         });
+        //Add products
+        app.post('/products', async (req, res) => {
+            const product = req.body;
+            // console.log("hiiting post", service);
+            const result = await productsCollection.insertOne(product);
+            res.json(result);
+
+        });
         //Admin create
         app.put('/users/:email', async (req, res) => {
             const email = req.params.email;
@@ -104,6 +112,7 @@ async function run() {
             console.log(result);
             res.json(result);
         });
+        // Review stored 
         app.post('/reviews', async (req, res) => {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
@@ -111,7 +120,15 @@ async function run() {
             res.json(result);
 
         });
+        //Review Show
 
+        app.get('/reviews', async (req, res) => {
+
+            const cursor = reviewCollection.find({});
+            const reviews = await cursor.toArray();
+            // console.log(reviews);
+            res.json(reviews)
+        });
 
     }
     finally {
